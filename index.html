@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Thầy Cô K45</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#c9a84c;--g3:#9a7a2e;--bg:#0f0e0a;--b2:#1a1812;--b3:#252218;
+  --t:#f0e8d0;--t2:#b8aa88;--t3:#7a6e50;--br:#3a3420;
+  --gn:#4caf7a;--rd:#e05252;--bl:#5a9fd4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+.hdr{background:linear-gradient(135deg,#1a1510,#0f0e0a);border-bottom:2px solid var(--g3);
+  padding:18px 16px 12px;text-align:center;position:relative}
+.hdr::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at top,rgba(201,168,76,.1),transparent 65%)}
+.hdr h1{font-family:'Playfair Display',serif;font-size:clamp(1rem,5vw,1.9rem);color:var(--g);position:relative}
+.hdr p{color:var(--t3);font-size:.68rem;margin-top:3px;letter-spacing:.05em;position:relative}
+
+/* SETUP */
+#setupScreen{max-width:500px;margin:32px auto;padding:0 16px}
+.card{background:var(--b2);border:1px solid var(--g3);border-radius:12px;padding:22px}
+.card h2{font-family:'Playfair Display',serif;color:var(--g);font-size:1.1rem;margin-bottom:10px}
+.card p{font-size:.76rem;color:var(--t2);line-height:1.7;margin-bottom:16px}
+.steps{margin-bottom:18px}
+.step{display:flex;gap:10px;margin-bottom:10px;font-size:.76rem;color:var(--t2);line-height:1.6;align-items:flex-start}
+.snum{width:22px;height:22px;min-width:22px;background:var(--g3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;color:var(--g);margin-top:1px}
+.step b{color:var(--t)} .step a{color:var(--bl)}
+.step code{background:var(--b3);padding:1px 5px;border-radius:3px;font-size:.7rem;color:#aac8e8;word-break:break-all}
+.f{margin-bottom:10px}
+.f label{display:block;font-size:.7rem;color:var(--t2);margin-bottom:4px;font-weight:500}
+.f input{width:100%;background:var(--bg);border:1px solid var(--br);border-radius:6px;
+  padding:9px 11px;color:var(--t);font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;
+  outline:none;transition:border-color .2s}
+.f input:focus{border-color:var(--g3)} .f input::placeholder{color:var(--t3)}
+.btn-go{width:100%;background:var(--g);color:#0f0e0a;border:none;border-radius:7px;
+  padding:11px;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;font-size:.88rem;
+  cursor:pointer;margin-top:4px}
+.btn-go:active{opacity:.8} .btn-go:disabled{opacity:.4}
+.setup-err{color:var(--rd);font-size:.73rem;margin-top:8px;display:none;line-height:1.5}
+.hint{font-size:.68rem;color:var(--t3);margin-top:10px;line-height:1.6;text-align:center}
+.hint a{color:var(--bl)}
+
+/* SYNC */
+.sbar{display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:5px 12px;font-size:.67rem;border-bottom:1px solid var(--br)}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.s-ok .sd{background:var(--gn)} .s-ok{color:var(--gn)}
+.s-err .sd{background:var(--rd)} .s-err{color:var(--rd)}
+.s-load .sd{background:var(--g);animation:pulse 1s infinite} .s-load{color:var(--g)}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* TABS */
+.tw{background:var(--b2);border-bottom:1px solid var(--br);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tw::-webkit-scrollbar{display:none}
+.tabs{display:flex;min-width:max-content;padding:0 8px}
+.tb{background:none;border:none;color:var(--t3);font-family:'Be Vietnam Pro',sans-serif;
+  font-size:.67rem;font-weight:500;letter-spacing:.06em;padding:10px 12px 8px;cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;text-transform:uppercase;
+  -webkit-tap-highlight-color:transparent}
+.tb:hover{color:var(--t2)} .tb.on{color:var(--g);border-bottom-color:var(--g)}
+.tb.st{color:var(--bl)} .tb.st.on{border-bottom-color:var(--bl)}
+
+/* CONTENT */
+.content{max-width:840px;margin:0 auto;padding:16px 13px 80px}
+.nb{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.18);
+  border-radius:7px;padding:9px 13px;font-size:.73rem;color:var(--t2);margin-bottom:13px;line-height:1.65}
+.nb strong{color:var(--g)}
+.vrow{display:flex;gap:8px;align-items:center;margin-bottom:13px}
+.vlbl{font-size:.72rem;color:var(--t2);white-space:nowrap}
+.vi{background:var(--bg);border:1px solid var(--br);border-radius:6px;
+  padding:8px 11px;color:var(--t);font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;
+  outline:none;flex:1;-webkit-appearance:none}
+.vi:focus{border-color:var(--g3)} .vi::placeholder{color:var(--t3)} .vi.warn{border-color:var(--rd)}
+.sh{display:flex;align-items:center;gap:9px;margin:20px 0 8px}
+.sl{font-family:'Playfair Display',serif;color:var(--g);font-size:.85rem;white-space:nowrap}
+.sline{flex:1;height:1px;background:var(--br)}
+.tlist{display:flex;flex-direction:column;gap:5px}
+.tc{background:var(--b2);border:1px solid var(--br);border-radius:9px;
+  padding:11px 14px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;
+  transition:border-color .15s,background .15s;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.tc:active{background:var(--b3)} .tc.sel{border-color:var(--gn);background:rgba(76,175,122,.05)}
+.tc.cust{border-style:dashed}
+.chk{width:20px;height:20px;border:2px solid var(--t3);border-radius:5px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .13s;background:var(--bg)}
+.sel .chk{background:var(--gn);border-color:var(--gn)}
+.chk svg{display:none} .sel .chk svg{display:block}
+.ic{flex:1;min-width:0}
+.tmon{font-size:.63rem;color:var(--g);font-weight:600;letter-spacing:.05em;margin-bottom:1px}
+.tn{font-weight:600;font-size:.88rem;color:var(--t)}
+.tm{font-size:.68rem;color:var(--t3);margin-top:3px;line-height:1.5}
+.tag{display:inline-block;font-size:.58rem;padding:1px 6px;border-radius:99px;font-weight:500;margin-left:5px;vertical-align:middle}
+.tag-r{background:rgba(201,168,76,.15);color:var(--g)}
+.tag-a{background:rgba(76,175,122,.15);color:var(--gn)}
+.tag-p{background:rgba(150,150,150,.15);color:#888}
+.vlist{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.vb{background:rgba(90,159,212,.14);color:var(--bl);border-radius:4px;
+  padding:2px 7px;font-size:.6rem;font-weight:500;display:inline-flex;align-items:center;gap:4px}
+.vx{cursor:pointer;opacity:.55;font-size:.82rem;line-height:1} .vx:active{opacity:1;color:var(--rd)}
+
+/* SUMMARY */
+.ss{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px}
+.chip{background:var(--b2);border:1px solid var(--br);border-radius:20px;padding:3px 10px;font-size:.67rem;color:var(--t2)}
+.chip b{color:var(--g)}
+.allbox{background:var(--b2);border:1px solid var(--g3);border-radius:9px;padding:14px;margin-bottom:14px}
+.allbox h3{font-family:'Playfair Display',serif;color:var(--g);font-size:.92rem;margin-bottom:10px}
+.ar{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(58,52,32,.35);font-size:.75rem;color:var(--t2)}
+.ar:last-child{border-bottom:none}
+.adot{width:5px;height:5px;border-radius:50%;background:var(--gn);flex-shrink:0}
+.amon{font-size:.6rem;color:var(--t3);margin-left:3px}
+.acls{margin-left:auto;display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.ab{background:rgba(90,159,212,.15);color:var(--bl);border-radius:3px;padding:1px 5px;font-size:.58rem}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:8px}
+.sblock{background:var(--b2);border:1px solid var(--br);border-radius:8px;overflow:hidden}
+.sblk-h{background:rgba(201,168,76,.1);border-bottom:1px solid var(--br);padding:8px 12px;font-family:'Playfair Display',serif;color:var(--g);font-size:.85rem}
+.srow{padding:6px 12px;border-bottom:1px solid rgba(58,52,32,.3);font-size:.73rem;color:var(--t2)}
+.srow:last-child{border-bottom:none}
+.srt{display:flex;align-items:center;gap:5px}
+.smon{color:var(--t3);font-size:.6rem;margin-left:auto;padding-left:5px;white-space:nowrap}
+.swho{font-size:.59rem;color:var(--bl);padding-left:10px;margin-top:1px}
+.empty{padding:14px;text-align:center;color:var(--t3);font-size:.71rem;font-style:italic}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;z-index:100;padding:14px;backdrop-filter:blur(4px)}
+.modal{background:var(--b2);border:1px solid var(--g3);border-radius:12px;padding:22px;width:100%;max-width:400px;max-height:92vh;overflow-y:auto}
+.modal h2{font-family:'Playfair Display',serif;color:var(--g);font-size:.95rem;margin-bottom:13px}
+.mf{margin-bottom:12px}
+.mf label{display:block;font-size:.7rem;color:var(--t2);margin-bottom:4px;font-weight:500}
+.mf input,.mf select,.mf textarea{width:100%;background:var(--bg);border:1px solid var(--br);border-radius:6px;
+  padding:9px 11px;color:var(--t);font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;outline:none;-webkit-appearance:none}
+.mf input:focus,.mf select:focus,.mf textarea:focus{border-color:var(--g3)}
+.mf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a6e50'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.mf select option{background:#1a1812}
+.mf textarea{resize:vertical;min-height:54px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mbtns{display:flex;gap:8px;margin-top:16px}
+.bsave{flex:1;background:var(--g);color:#0f0e0a;border:none;border-radius:7px;padding:11px;
+  font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:.83rem;cursor:pointer}
+.bsave:active{opacity:.75} .bsave:disabled{opacity:.4}
+.bcancel{background:none;border:1px solid var(--br);color:var(--t2);border-radius:7px;
+  padding:11px 15px;font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;cursor:pointer}
+.berr{color:var(--rd);font-size:.71rem;margin-bottom:9px;padding:7px 11px;
+  background:rgba(224,82,82,.08);border-radius:5px;border:1px solid rgba(224,82,82,.2)}
+.fab{position:fixed;bottom:22px;right:17px;width:50px;height:50px;background:var(--g);
+  border:none;border-radius:50%;color:#0f0e0a;font-size:1.4rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(201,168,76,.45);z-index:50;-webkit-tap-highlight-color:transparent}
+.fab:active{transform:scale(.92)}
+.spin{width:28px;height:28px;border:3px solid var(--br);border-top-color:var(--g);
+  border-radius:50%;animation:sp .7s linear infinite;margin:52px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+#mainApp{display:none}
+#panels>div{display:none} #panels>div.on{display:block}
+@media(max-width:480px){.sgrid{grid-template-columns:1fr}.r2{grid-template-columns:1fr}.content{padding:14px 11px 75px}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>✦ Thầy Cô Dạy K45 ✦</h1>
+  <p>Chuyên Hà Nam · Hội khóa K45</p>
+</div>
+
+<!-- ═══ SETUP ════════════════════════════════════════════════ -->
+<div id="setupScreen">
+  <div class="card">
+    <h2>🔗 Kết nối GitHub để lưu data</h2>
+    <p>Data lưu thẳng vào 1 file JSON trên GitHub repo của bạn — <b style="color:var(--t)">miễn phí, không cần server</b>, mobile & desktop đều dùng được.</p>
+    <div class="steps">
+      <div class="step"><div class="snum">1</div>
+        <div>Vào <a href="https://github.com" target="_blank"><b>github.com</b></a> → đăng nhập → tạo repo tên <b>k45-data</b>, chọn <b>Public</b></div></div>
+      <div class="step"><div class="snum">2</div>
+        <div>Trong repo đó tạo file <code>data.json</code> với nội dung <code>{"teachers":[],"selected":{}}</code> → Commit</div></div>
+      <div class="step"><div class="snum">3</div>
+        <div>Vào <b>Settings → Developer settings → Personal access tokens → Fine-grained</b> → tạo token, cấp quyền <b>Contents: Read & Write</b> cho repo <b>k45-data</b></div></div>
+      <div class="step"><div class="snum">4</div>
+        <div>Dán thông tin vào dưới, bấm <b>Bắt đầu</b></div></div>
+    </div>
+    <div class="f">
+      <label>GitHub Username</label>
+      <input id="ghUser" placeholder="tenbantrengithub"/>
+    </div>
+    <div class="f">
+      <label>Personal Access Token</label>
+      <input id="ghToken" type="password" placeholder="github_pat_..."/>
+    </div>
+    <div class="f">
+      <label>Tên repo (mặc định: k45-data)</label>
+      <input id="ghRepo" placeholder="k45-data" value="k45-data"/>
+    </div>
+    <button class="btn-go" id="btnGo" onclick="startApp()">Bắt đầu →</button>
+    <div class="setup-err" id="setupErr"></div>
+    <p class="hint">Token chỉ lưu trong máy bạn (localStorage), không ai khác thấy được.<br/>
+    Chỉ người setup mới cần làm bước này — người khác dùng link bình thường.<br/>
+    Hỏi thêm: <a href="#">xem hướng dẫn chi tiết</a></p>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═════════════════════════════════════════════ -->
+<div id="mainApp">
+  <div class="sbar s-load" id="sbar"><div class="sd"></div><span id="smsg">Đang tải…</span></div>
+  <div class="tw"><div class="tabs" id="tabs"></div></div>
+  <div class="content"><div id="panels"></div></div>
+  <button class="fab" onclick="openModal()">＋</button>
+</div>
+
+<!-- ═══ ADD MODAL ════════════════════════════════════════════ -->
+<div class="ov" id="modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2>➕ Thêm Thầy Cô Mới</h2>
+    <p style="font-size:.69rem;color:var(--t3);margin-bottom:13px;line-height:1.5">Hiện ở <b style="color:var(--t2)">tất cả các lớp</b>, đồng bộ toàn nhóm.</p>
+    <div class="r2">
+      <div class="mf"><label>Danh xưng</label><select id="fTitle"><option>Cô</option><option>Thầy</option></select></div>
+      <div class="mf"><label>Môn dạy</label><select id="fMon"></select></div>
+    </div>
+    <div class="mf"><label>Họ và tên *</label><input id="fName" placeholder="Nguyễn Thị A"/></div>
+    <div class="r2">
+      <div class="mf"><label>Tình trạng</label>
+        <select id="fStatus">
+          <option value="">Không rõ</option><option value="retired">Đã nghỉ hưu</option>
+          <option value="active">Đang dạy</option><option value="passed">Đã mất</option>
+        </select></div>
+      <div class="mf"><label>Số điện thoại</label><input id="fPhone" type="tel" placeholder="0912…"/></div>
+    </div>
+    <div class="mf"><label>Ghi chú</label><textarea id="fNote" placeholder="Địa chỉ, nơi công tác…"></textarea></div>
+    <div class="berr" id="fErr" style="display:none"></div>
+    <div class="mbtns">
+      <button class="bcancel" onclick="closeModal()">Huỷ</button>
+      <button class="bsave" id="fSave" onclick="submitAdd()">✓ Lưu thầy cô</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════════
+const CLASSES=['Toán','Lý','Hoá','Sinh','Tin','Văn','Sử-Địa','Anh','Nga','Cận-Chuyên'];
+const MON_ORDER=['BGH','Toán','Văn','Lý','Hoá','Sinh','Kỹ thuật','Tin','Sử','Địa','GDCD','Anh','Nga','Thể dục','Khác'];
+const MON_OPTIONS=['Toán','Văn','Lý','Hoá','Sinh','Kỹ thuật','Tin','Sử','Địa','GDCD','Anh','Nga','Thể dục','BGH','Khác'];
+const DEFAULTS=[
+  {id:'bgh1',name:'Trần Sơn Hoa',title:'Thầy',mon:'BGH',status:'retired',phone:'0363863517',note:'Nguyên Hiệu trưởng'},
+  {id:'bgh2',name:'Đinh Thị Hằng',title:'Cô',mon:'BGH',status:'retired',phone:'0906180671',note:'Nguyên Phó Hiệu trưởng'},
+  {id:'bgh3',name:'Đỗ Thị Tính',title:'Cô',mon:'BGH',status:'retired',phone:'0912220188',note:'Nguyên Phó Hiệu trưởng'},
+  {id:'bgh4',name:'Vũ Xuân Quang',title:'Thầy',mon:'BGH',status:'retired',phone:'0915027567',note:'Nguyên Phó Hiệu trưởng'},
+  {id:'bgh5',name:'Phạm Thị Ngân',title:'Cô',mon:'BGH',status:'',phone:'0915125997',note:'Nguyên Hiệu trưởng'},
+  {id:'bgh6',name:'Nguyễn Thị Bích Hằng',title:'Cô',mon:'BGH',status:'active',phone:'0915669257',note:'Hiệu trưởng'},
+  {id:'bgh7',name:'Cao Xuân Phan',title:'Thầy',mon:'BGH',status:'active',phone:'0916762363',note:'Phó Hiệu trưởng'},
+  {id:'bgh8',name:'Vũ Thị Lan Hương',title:'Cô',mon:'BGH',status:'active',phone:'0982252189',note:'Phó Hiệu trưởng'},
+  {id:'t01',name:'Trần Ngọc Dung',title:'Cô',mon:'Toán',status:'retired',phone:'0363863517',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'t02',name:'Lê Văn Thảo',title:'Thầy',mon:'Toán',status:'passed',phone:'',note:''},
+  {id:'t03',name:'Trịnh Thị Thanh Bình',title:'Cô',mon:'Toán',status:'active',phone:'0945807129',note:'Nam Trần Hưng Đạo'},
+  {id:'t04',name:'Nguyễn Văn Sơn',title:'Thầy',mon:'Toán',status:'',phone:'',note:'Bộ GD&ĐT'},
+  {id:'t05',name:'Nguyễn Văn Hanh',title:'Thầy',mon:'Toán',status:'retired',phone:'0915493998',note:'Nguyên Sở GD&ĐT Hà Nam'},
+  {id:'t06',name:'Trần Thị Thu Thủy',title:'Cô',mon:'Toán',status:'active',phone:'0984677275',note:'Nguyễn Văn Trỗi - Phủ Lý'},
+  {id:'t07',name:'Nguyễn Thị Thanh Thủy',title:'Cô',mon:'Toán',status:'active',phone:'',note:'Lê Hồng Phong - Phủ Lý'},
+  {id:'t08',name:'Trần Duy Bình',title:'Thầy',mon:'Toán',status:'active',phone:'',note:''},
+  {id:'t09',name:'Đào Quốc Huy',title:'Thầy',mon:'Toán',status:'active',phone:'0904276699',note:'Chuyên viên Sở GDĐT Ninh Bình'},
+  {id:'t10',name:'Nguyễn Thúy Hòa',title:'Cô',mon:'Toán',status:'active',phone:'',note:''},
+  {id:'t11',name:'Nguyễn Duy Hà',title:'Cô',mon:'Toán',status:'',phone:'',note:''},
+  {id:'t12',name:'Lê Thị Kim Hiếu',title:'Cô',mon:'Toán',status:'retired',phone:'0972283986',note:'Nghỉ hưu tại Hà Nội'},
+  {id:'t13',name:'Nguyễn Thu Hà',title:'Cô',mon:'Toán',status:'retired',phone:'0914162363',note:'Đường Quy Lưu - Phủ Lý'},
+  {id:'v01',name:'Trần Thị Hạnh',title:'Cô',mon:'Văn',status:'active',phone:'0943036460',note:'Đường Biên Hoà'},
+  {id:'v02',name:'Đỗ Thị Thu Hồng',title:'Cô',mon:'Văn',status:'',phone:'0975381240',note:'Chuyển THPT Trần Hưng Đạo - HN'},
+  {id:'v03',name:'Đinh Thị Mỳ',title:'Cô',mon:'Văn',status:'retired',phone:'0832060633',note:'Thanh Châu - Phủ Lý'},
+  {id:'v04',name:'Trần Thị Dũng',title:'Cô',mon:'Văn',status:'retired',phone:'02263851619',note:'Minh Khai - Phủ Lý'},
+  {id:'v05',name:'Nguyễn Thị Mai Liên',title:'Cô',mon:'Văn',status:'retired',phone:'0944253859',note:'Minh Khai - Phủ Lý'},
+  {id:'v06',name:'Nguyễn Quang Tuyến',title:'Thầy',mon:'Văn',status:'',phone:'0395728181',note:'Hà Nội'},
+  {id:'v07',name:'Đỗ Thị Thu Thuỷ',title:'Cô',mon:'Văn',status:'',phone:'0915109999',note:'ĐH Văn Hóa, Hà Nội'},
+  {id:'v08',name:'Vũ Thị Thu Hà',title:'Cô',mon:'Văn',status:'',phone:'',note:'Bộ GD&ĐT'},
+  {id:'v09',name:'Ngô Thị Tính',title:'Cô',mon:'Văn',status:'retired',phone:'0912564773',note:'Nghỉ hưu tại Hà Nội'},
+  {id:'v10',name:'Lê Thị Chung',title:'Cô',mon:'Văn',status:'passed',phone:'',note:''},
+  {id:'v11',name:'Nguyễn Thị Lan Dung',title:'Cô',mon:'Văn',status:'active',phone:'',note:''},
+  {id:'l01',name:'Bùi Minh Hằng',title:'Cô',mon:'Lý',status:'retired',phone:'0982225686',note:'Lương Khánh Thiện - Phủ Lý'},
+  {id:'l02',name:'Lã Thị Thanh Mai',title:'Cô',mon:'Lý',status:'retired',phone:'0394626493',note:'Nguyễn Văn Trỗi - Phủ Lý'},
+  {id:'l03',name:'Phan Quán Lâm',title:'Thầy',mon:'Lý',status:'',phone:'0936488433',note:'Hoàng Mai, Hà Nội'},
+  {id:'l04',name:'Phạm Văn Thông',title:'Thầy',mon:'Lý',status:'passed',phone:'',note:''},
+  {id:'l05',name:'Trần Thị Thiện',title:'Cô',mon:'Lý',status:'retired',phone:'0394507557',note:'Trần Quốc Toản - Phủ Lý'},
+  {id:'h01',name:'Phạm Thị Thanh Tâm',title:'Cô',mon:'Hoá',status:'',phone:'',note:''},
+  {id:'h02',name:'Phan Văn Ban',title:'Thầy',mon:'Hoá',status:'retired',phone:'',note:''},
+  {id:'h03',name:'Trần Thị Tuyết',title:'Cô',mon:'Hoá',status:'active',phone:'0984577596',note:'Đường Quy Lưu - Phủ Lý'},
+  {id:'h04',name:'Phạm Thị Thoa',title:'Cô',mon:'Hoá',status:'retired',phone:'0386791558',note:'Nguyễn Viết Xuân, Phủ Lý'},
+  {id:'h05',name:'Nguyễn Minh Thay',title:'Thầy',mon:'Hoá',status:'retired',phone:'0984417577',note:'Phan Huy Chú, Phủ Lý'},
+  {id:'h06',name:'Nguyễn Trường Giang',title:'Thầy',mon:'Hoá',status:'active',phone:'',note:''},
+  {id:'s01',name:'Phạm Thị Thi',title:'Cô',mon:'Sinh',status:'retired',phone:'0386791558',note:'Nguyễn Viết Xuân, Phủ Lý'},
+  {id:'s02',name:'Nguyễn Thị Hường',title:'Cô',mon:'Sinh',status:'retired',phone:'0914283015',note:'Trường Chinh - Minh Khai'},
+  {id:'s03',name:'Nguyễn Kim Trung',title:'Thầy',mon:'Sinh',status:'retired',phone:'0911911197',note:'Hà Đông, Hà Nội'},
+  {id:'s04',name:'Tạ Thị Thu Xuân',title:'Cô',mon:'Sinh',status:'active',phone:'0947534791',note:'Trường Chinh - Minh Khai'},
+  {id:'kt1',name:'Tạ Thị Oanh',title:'Cô',mon:'Kỹ thuật',status:'retired',phone:'0386065064',note:'Trần Thị Phúc, Phủ Lý'},
+  {id:'kt2',name:'Lữ Văn Chính',title:'Thầy',mon:'Kỹ thuật',status:'retired',phone:'0915612566',note:'Trường Chinh, Phủ Lý'},
+  {id:'tin1',name:'Lê Thị Hải Hằng',title:'Cô',mon:'Tin',status:'',phone:'0982021868',note:'Phủ Lý'},
+  {id:'tin2',name:'Nguyễn Viết Phong',title:'Thầy',mon:'Tin',status:'',phone:'0839640799',note:'Sở GD&ĐT'},
+  {id:'tin3',name:'Nguyễn Thị Vân Khánh',title:'Cô',mon:'Tin',status:'active',phone:'0912444390',note:'KĐT Nam Trần Hưng Đạo'},
+  {id:'su1',name:'Nguyễn … Cường',title:'Thầy',mon:'Sử',status:'passed',phone:'',note:'Nghỉ hưu tại Hà Nam'},
+  {id:'su2',name:'Trần Anh Đào',title:'Cô',mon:'Sử',status:'',phone:'0985732959',note:'Lam Hạ, Phủ Lý'},
+  {id:'su3',name:'Lê Thị Hồng Diệp',title:'Cô',mon:'Sử',status:'retired',phone:'0915612566',note:'Nghỉ hưu tại Hà Nội'},
+  {id:'su4',name:'Trần Tùng Lâm',title:'Thầy',mon:'Sử',status:'passed',phone:'',note:'Nghỉ hưu tại Hà Nam'},
+  {id:'su5',name:'Nguyễn Văn Hoa',title:'Thầy',mon:'Sử',status:'retired',phone:'0916086954',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'su6',name:'Trương Thị Quyên',title:'Cô',mon:'Sử',status:'active',phone:'',note:''},
+  {id:'di1',name:'Nguyễn Thanh Bình',title:'Thầy',mon:'Địa',status:'',phone:'0915226033',note:'Sở GD&ĐT Ninh Bình'},
+  {id:'di2',name:'Nguyễn Bằng',title:'Thầy',mon:'Địa',status:'',phone:'',note:''},
+  {id:'di3',name:'Lê Thị Thanh',title:'Cô',mon:'Địa',status:'active',phone:'',note:'Nam Trần Hưng Đạo'},
+  {id:'di4',name:'Vũ Thị Lan',title:'Cô',mon:'Địa',status:'',phone:'0916266958',note:'Liêm Chính, Phủ Lý'},
+  {id:'cd1',name:'Nguyễn Thị Phương',title:'Cô',mon:'GDCD',status:'retired',phone:'',note:'Trường Chinh - Minh Khai'},
+  {id:'cd2',name:'Lê Thị Đức',title:'Cô',mon:'GDCD',status:'retired',phone:'0942913165',note:'Chu Văn An - Liêm Chính'},
+  {id:'a01',name:'Phùng Thị Thái',title:'Cô',mon:'Anh',status:'retired',phone:'0987784043',note:''},
+  {id:'a02',name:'Phạm Khánh Dung',title:'Cô',mon:'Anh',status:'retired',phone:'0762202599',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'a03',name:'Phạm Thị Bình',title:'Cô',mon:'Anh',status:'retired',phone:'0915904147',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'a04',name:'Trần Thị Nhung',title:'Cô',mon:'Anh',status:'retired',phone:'0915610468',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'a05',name:'Trần Thị Thu Hiền',title:'Cô',mon:'Anh',status:'',phone:'0915920339',note:'Phó phòng GDTX Sở Ninh Bình'},
+  {id:'a06',name:'Phạm Thanh Lưu',title:'Cô',mon:'Anh',status:'',phone:'',note:'Chuyển THPT Mỹ Tho, Nam Định'},
+  {id:'a07',name:'Phạm Thị Nguyệt Thu',title:'Cô',mon:'Anh',status:'',phone:'0985824069',note:'Phủ Lý'},
+  {id:'n01',name:'Nguyễn Thị Thúy',title:'Cô',mon:'Nga',status:'retired',phone:'',note:'Nghỉ hưu tại Phủ Lý'},
+  {id:'td1',name:'Đào Thị Tuyết',title:'Cô',mon:'Thể dục',status:'retired',phone:'',note:'Trường Chinh - Minh Khai'},
+  {id:'td2',name:'Đỗ Công Đoàn',title:'Thầy',mon:'Thể dục',status:'active',phone:'0987882438',note:'Phủ Lý'},
+  {id:'td3',name:'Phạm Văn Công',title:'Thầy',mon:'Thể dục',status:'active',phone:'0913289187',note:'Đường Quy Lưu - Phủ Lý'},
+];
+
+// ══════════════════════════════════════════════════════════════
+//  STATE & CONFIG
+// ══════════════════════════════════════════════════════════════
+let GH_USER='',GH_TOKEN='',GH_REPO='k45-data';
+let gTeachers=[],gSel={},gSha='',gTab='Toán',gMe='';
+let saveTimer=null;
+
+// populate môn select
+const fMon=document.getElementById('fMon');
+MON_OPTIONS.forEach(m=>{const o=document.createElement('option');o.textContent=m;fMon.appendChild(o);});
+
+// auto-load saved config
+window.addEventListener('load',()=>{
+  const u=localStorage.getItem('k45gh_user');
+  const t=localStorage.getItem('k45gh_token');
+  const r=localStorage.getItem('k45gh_repo');
+  if(u&&t){
+    GH_USER=u; GH_TOKEN=t; GH_REPO=r||'k45-data';
+    document.getElementById('ghUser').value=u;
+    document.getElementById('ghToken').value=t;
+    document.getElementById('ghRepo').value=GH_REPO;
+    document.getElementById('setupScreen').style.display='none';
+    document.getElementById('mainApp').style.display='block';
+    loadAll();
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  GITHUB API
+// ══════════════════════════════════════════════════════════════
+const GH_API=()=>`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/data.json`;
+
+async function ghRead(){
+  const r=await fetch(GH_API(),{headers:{
+    'Authorization':'token '+GH_TOKEN,
+    'Accept':'application/vnd.github.v3+json'
+  }});
+  if(!r.ok) throw new Error('GitHub '+r.status+': '+await r.text());
+  const j=await r.json();
+  gSha=j.sha;
+  return JSON.parse(atob(j.content.replace(/\n/g,'')));
+}
+
+async function ghWrite(data){
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+  const r=await fetch(GH_API(),{
+    method:'PUT',
+    headers:{
+      'Authorization':'token '+GH_TOKEN,
+      'Accept':'application/vnd.github.v3+json',
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({message:'update data',content,sha:gSha})
+  });
+  if(!r.ok) throw new Error('GitHub '+r.status+': '+await r.text());
+  const j=await r.json();
+  gSha=j.content.sha;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SETUP
+// ══════════════════════════════════════════════════════════════
+async function startApp(){
+  const u=document.getElementById('ghUser').value.trim();
+  const t=document.getElementById('ghToken').value.trim();
+  const r=document.getElementById('ghRepo').value.trim()||'k45-data';
+  const errEl=document.getElementById('setupErr');
+  errEl.style.display='none';
+  if(!u||!t){errEl.textContent='Vui lòng nhập đủ Username và Token';errEl.style.display='block';return;}
+  const btn=document.getElementById('btnGo');
+  btn.disabled=true; btn.textContent='Đang kiểm tra…';
+  GH_USER=u; GH_TOKEN=t; GH_REPO=r;
+  try{
+    await ghRead();
+    localStorage.setItem('k45gh_user',u);
+    localStorage.setItem('k45gh_token',t);
+    localStorage.setItem('k45gh_repo',r);
+    document.getElementById('setupScreen').style.display='none';
+    document.getElementById('mainApp').style.display='block';
+    applyData();
+  }catch(e){
+    errEl.textContent='Lỗi kết nối: '+e.message;
+    errEl.style.display='block';
+  }
+  btn.disabled=false; btn.textContent='Bắt đầu →';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  LOAD / SAVE
+// ══════════════════════════════════════════════════════════════
+function sortT(list){
+  return [...list].sort((a,b)=>{
+    const mi=MON_ORDER.indexOf(a.mon)-MON_ORDER.indexOf(b.mon);
+    if(mi) return mi;
+    return a.name.split(' ').pop().localeCompare(b.name.split(' ').pop(),'vi');
+  });
+}
+function setSync(st,msg){
+  document.getElementById('sbar').className='sbar s-'+st;
+  document.getElementById('smsg').textContent=msg;
+}
+
+async function loadAll(quiet){
+  if(!quiet) setSync('load','Đang tải…');
+  try{
+    const d=await ghRead();
+    gSel=d.selected||{};
+    const extra=d.teachers||[];
+    gTeachers=sortT([...DEFAULTS,...extra]);
+    setSync('ok','Đồng bộ '+new Date().toLocaleTimeString('vi-VN'));
+    renderAll();
+  }catch(e){
+    setSync('err','Lỗi: '+e.message);
+    if(!quiet){gTeachers=sortT([...DEFAULTS]);gSel={};renderAll();}
+  }
+}
+
+function applyData(){
+  gTeachers=sortT([...DEFAULTS]);
+  gSel={};
+  setSync('ok','Đã kết nối');
+  renderAll();
+  loadAll(true);
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  setSync('load','Đang lưu…');
+  saveTimer=setTimeout(async()=>{
+    try{
+      const extra=gTeachers.filter(t=>t.isCustom);
+      await ghWrite({teachers:extra,selected:gSel});
+      setSync('ok','Đã lưu '+new Date().toLocaleTimeString('vi-VN'));
+    }catch(e){
+      setSync('err','Lỗi lưu: '+e.message);
+    }
+  },600);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════════════
+function renderAll(){renderTabs();renderPanels();}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML=
+    CLASSES.map(c=>`<button class="tb${c===gTab?' on':''}" onclick="switchTab('${c}',this)">${c}</button>`).join('')+
+    `<button class="tb st${gTab==='SUM'?' on':''}" onclick="switchTab('SUM',this)">📊 Tổng hợp</button>`;
+}
+function switchTab(t,btn){
+  gTab=t;
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#panels>div').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+t).classList.add('on');
+}
+function renderPanels(){
+  let html='';
+  CLASSES.forEach(c=>{html+=`<div id="panel-${c}"${c===gTab?' class="on"':''}>${buildClass(c)}</div>`;});
+  html+=`<div id="panel-SUM"${gTab==='SUM'?' class="on"':''}>${buildSummary()}</div>`;
+  document.getElementById('panels').innerHTML=html;
+  const vi=document.getElementById('voterInput');
+  if(vi){vi.value=gMe;vi.oninput=e=>{gMe=e.target.value;};}
+}
+
+function stag(s){
+  if(!s)return '';
+  const c=s==='retired'?'tag-r':s==='active'?'tag-a':'tag-p';
+  return `<span class="tag ${c}">${{retired:'Nghỉ hưu',active:'Đang dạy',passed:'Đã mất'}[s]}</span>`;
+}
+
+function buildClass(cls){
+  const byMon={};
+  gTeachers.forEach(t=>{if(!byMon[t.mon])byMon[t.mon]=[];byMon[t.mon].push(t);});
+  const groups=MON_ORDER.filter(m=>byMon[m]).map(m=>({mon:m,list:byMon[m]}));
+  let h=`<div class="nb"><strong>Lớp ${cls}</strong> — Nhập tên bạn rồi bấm chọn thầy cô. Bấm lại để bỏ. × để xoá nhầm.</div>
+    <div class="vrow"><span class="vlbl">Bạn là:</span>
+    <input class="vi" id="voterInput" placeholder="VD: Nguyễn Thị Lan" maxlength="40"/></div>`;
+  groups.forEach(({mon,list})=>{
+    h+=`<div class="sh"><span class="sl">Môn ${mon}</span><div class="sline"></div></div><div class="tlist">`;
+    list.forEach(t=>{
+      const vs=(gSel[t.id]||{})[cls]||[];
+      const myOn=!!(gMe.trim()&&vs.includes(gMe.trim()));
+      const badges=vs.map(v=>`<span class="vb">${v}<span class="vx" onclick="rmV(event,'${t.id}','${cls}','${v.replace(/'/g,"\\'")}')">×</span></span>`).join('');
+      h+=`<div class="tc${myOn?' sel':''}${t.isCustom?' cust':''}" onclick="pick('${t.id}','${cls}')">
+        <div class="chk"><svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+          <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ic">
+          <div class="tmon">${t.mon}</div>
+          <div class="tn">${t.title} ${t.name}${stag(t.status)}</div>
+          <div class="tm">${[t.phone,t.note].filter(Boolean).join(' · ')||'&nbsp;'}</div>
+          ${vs.length?`<div class="vlist">${badges}</div>`:''}
+        </div></div>`;
+    });
+    h+=`</div>`;
+  });
+  return h;
+}
+
+function buildSummary(){
+  const selIn=cls=>gTeachers.filter(t=>((gSel[t.id]||{})[cls]||[]).length>0);
+  const allSel=gTeachers.filter(t=>CLASSES.some(cls=>((gSel[t.id]||{})[cls]||[]).length>0));
+  const total=CLASSES.reduce((a,c)=>a+selIn(c).length,0);
+  let h=`<div class="ss"><div class="chip">Tổng: <b>${total}</b></div>`;
+  CLASSES.forEach(c=>{h+=`<div class="chip">${c}: <b>${selIn(c).length}</b></div>`;});
+  h+=`</div><div class="allbox"><h3>✦ Tất cả thầy cô được chọn (${allSel.length})</h3>`;
+  if(!allSel.length)h+=`<div style="color:var(--t3);font-size:.72rem;font-style:italic">Chưa có lựa chọn nào</div>`;
+  else allSel.forEach(t=>{
+    const cw=CLASSES.filter(c=>((gSel[t.id]||{})[c]||[]).length>0);
+    h+=`<div class="ar"><div class="adot"></div><span>${t.title} ${t.name}</span><span class="amon">(${t.mon})</span>
+      <div class="acls">${cw.map(c=>`<span class="ab">${c}</span>`).join('')}</div></div>`;
+  });
+  h+=`</div><div class="sgrid">`;
+  CLASSES.forEach(cls=>{
+    const list=selIn(cls);
+    h+=`<div class="sblock"><div class="sblk-h">Lớp ${cls} — ${list.length} thầy cô</div>`;
+    if(!list.length)h+=`<div class="empty">Chưa chọn thầy cô nào</div>`;
+    else list.forEach(t=>{
+      const vs=(gSel[t.id]||{})[cls]||[];
+      h+=`<div class="srow"><div class="srt"><div class="adot"></div>
+        <span style="flex:1">${t.title} ${t.name}</span><span class="smon">${t.mon}</span></div>
+        ${vs.length?`<div class="swho">Bởi: ${vs.join(', ')}</div>`:''}</div>`;
+    });
+    h+=`</div>`;
+  });
+  return h+`</div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INTERACTIONS
+// ══════════════════════════════════════════════════════════════
+function reRenderPanel(cls){
+  const p=document.getElementById('panel-'+cls);
+  if(p){p.innerHTML=buildClass(cls);
+    const vi=document.getElementById('voterInput');
+    if(vi){vi.value=gMe;vi.oninput=e=>{gMe=e.target.value;};}}
+}
+function pick(tid,cls){
+  const name=gMe.trim();
+  if(!name){
+    const vi=document.getElementById('voterInput');
+    if(vi){vi.classList.add('warn');vi.focus();setTimeout(()=>vi.classList.remove('warn'),2000);}
+    return;
+  }
+  if(!gSel[tid])gSel[tid]={};
+  const arr=[...(gSel[tid][cls]||[])];
+  const idx=arr.indexOf(name);
+  if(idx>=0)arr.splice(idx,1);else arr.push(name);
+  gSel[tid][cls]=arr;
+  reRenderPanel(cls);
+  scheduleSave();
+}
+function rmV(e,tid,cls,name){
+  e.stopPropagation();
+  if(!gSel[tid]?.[cls])return;
+  gSel[tid][cls]=gSel[tid][cls].filter(v=>v!==name);
+  reRenderPanel(cls);
+  scheduleSave();
+}
+function openModal(){document.getElementById('modal').style.display='flex';}
+function closeModal(){document.getElementById('modal').style.display='none';}
+async function submitAdd(){
+  const name=document.getElementById('fName').value.trim();
+  const errEl=document.getElementById('fErr');
+  errEl.style.display='none';
+  if(!name){errEl.textContent='Vui lòng nhập họ và tên';errEl.style.display='block';return;}
+  const btn=document.getElementById('fSave');
+  btn.disabled=true;btn.textContent='Đang lưu…';
+  const t={id:'c'+Date.now().toString(36),name,
+    title:document.getElementById('fTitle').value,
+    mon:document.getElementById('fMon').value,
+    status:document.getElementById('fStatus').value,
+    phone:document.getElementById('fPhone').value.trim(),
+    note:document.getElementById('fNote').value.trim(),
+    isCustom:true};
+  gTeachers=sortT([...gTeachers,t]);
+  try{
+    const extra=gTeachers.filter(x=>x.isCustom);
+    await ghWrite({teachers:extra,selected:gSel});
+    setSync('ok','Đã lưu '+new Date().toLocaleTimeString('vi-VN'));
+    closeModal();
+    ['fName','fPhone','fNote'].forEach(id=>{document.getElementById(id).value='';});
+    renderAll();
+  }catch(e){
+    errEl.textContent='Lỗi: '+e.message;errEl.style.display='block';
+    gTeachers=gTeachers.filter(x=>x.id!==t.id);
+  }
+  btn.disabled=false;btn.textContent='✓ Lưu thầy cô';
+}
+
+setInterval(()=>{ if(GH_TOKEN) loadAll(true); },30000);
+</script>
+</body>
+</html>
