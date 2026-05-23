@@ -1,22 +1,16 @@
 {
-  "teachers": [
-    {
-      "id": "cmpi61jfk",
-      "name": "Trần Văn Phẩm",
-      "title": "Thầy",
-      "mon": "Lý",
-      "status": "retired",
-      "phone": "",
-      "note": "",
-      "isCustom": true
-    }
-  ],
+  "teachers": [],
   "selected": {
     "bgh2": {
-      "ToÃ¡n": []
+      "ToÃÂ¡n": []
     },
     "bgh8": {
-      "Lý": []
+      "LÃ½": []
+    },
+    "bgh6": {
+      "Lý": [
+        "Long"
+      ]
     }
   }
 }
